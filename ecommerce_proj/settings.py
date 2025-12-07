@@ -108,3 +108,4 @@ LOGIN_URL = '/account/login/'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+ADMIN_CREATE_TOKEN = os.environ.get("ADMIN_CREATE_TOKEN")

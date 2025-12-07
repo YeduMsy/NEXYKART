@@ -4,21 +4,26 @@ from django.db.models import Q
 from django.contrib import messages
 from .models import Category, Product, Order, OrderItem
 from cart.cart import Cart
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
+from django.conf import settings
 from django.contrib.auth.models import User
 
 def create_superuser_view(request):
-    if request.method == "POST":
-        if not User.objects.filter(username='admin').exists():
-            User.objects.create_superuser(
-                username='admin',
-                email='admin@example.com',
-                password='holasoydora'
-            )
-            return HttpResponse("<h1>Success! Superuser 'admin' created.</h1>")
-        else:
-            return HttpResponse("<h1>Superuser 'admin' already exists.</h1>")
-    return HttpResponse("<h1>Use POST request only.</h1>")
+    token = request.GET.get("token")
+
+    if token != settings.ADMIN_CREATE_TOKEN:
+        return HttpResponseForbidden("Unauthorized")
+
+    if not User.objects.filter(username="admin").exists():
+        User.objects.create_superuser(
+            username="admin",
+            email="admin@example.com",
+            password="holasoydora"
+        )
+        return HttpResponse("<h1>✅ Superuser created successfully</h1>")
+    else:
+        return HttpResponse("<h1>⚠️ Superuser already exists</h1>")
+
 def store_home(request):
     """
     The Homepage:
