@@ -11,5 +11,8 @@ class UserRegistrationForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        if cleaned_data.get("password") != cleaned_data.get("confirm_password"):
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if password != confirm_password:
             raise forms.ValidationError("Passwords do not match")
