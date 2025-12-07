@@ -10,7 +10,7 @@ def register(request):
             new_user.set_password(user_form.cleaned_data['password'])
             new_user.save()
             login(request, new_user)
-            return redirect('store:product_list')
+            return redirect('store:store_home')
     else:
         user_form = UserRegistrationForm()
     return render(request, 'account/register.html', {'user_form': user_form})
