@@ -13,21 +13,24 @@ class Product(models.Model):
     category = models.ForeignKey(Category, related_name='product', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    image = models.ImageField(upload_to='images/', default='images/default.png')
+    image = models.ImageField()   # ✅ Cloudinary-ready
     slug = models.SlugField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField(default=1)
     created = models.DateTimeField(auto_now_add=True)
-    
-    # NEW: Link to users who liked this product
+
     users_wishlist = models.ManyToManyField(User, related_name="user_wishlist", blank=True)
 
     @property
     def in_stock(self):
         return self.stock > 0
 
-    def get_absolute_url(self): return reverse('store:product_detail', args=[self.slug])
-    def __str__(self): return self.title
+    def get_absolute_url(self):
+        return reverse('store:product_detail', args=[self.slug])
+
+    def __str__(self):
+        return self.title
+
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)

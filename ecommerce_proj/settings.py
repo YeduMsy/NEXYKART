@@ -2,110 +2,161 @@ from pathlib import Path
 import os
 import dj_database_url
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# -----------------------------
+# BASE
+# -----------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-your-local-key-here')
-
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-local-dev-key')
 
 DEBUG = 'RENDER' not in os.environ
 
-ALLOWED_HOSTS = []
+# -----------------------------
+# HOSTS & CSRF (VERY IMPORTANT)
+# -----------------------------
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+    CSRF_TRUSTED_ORIGINS = [f"https://{RENDER_EXTERNAL_HOSTNAME}"]
 else:
-    ALLOWED_HOSTS.append('*') # For local dev
+    CSRF_TRUSTED_ORIGINS = []
 
-
+# -----------------------------
+# APPS
+# -----------------------------
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'store',
-    'cart',
-    'account',
-    'payment',
+    "cloudinary",
+    "cloudinary_storage",
+
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+
+    "store",
+    "cart",
+    "account",
+    "payment",
 ]
 
+# -----------------------------
+# MIDDLEWARE
+# -----------------------------
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # ✅ REQUIRED
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'ecommerce_proj.urls'
+ROOT_URLCONF = "ecommerce_proj.urls"
 
+# -----------------------------
+# TEMPLATES
+# -----------------------------
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates')],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.template.context_processors.debug',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'cart.context_processors.cart', 
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "django.template.context_processors.debug",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "cart.context_processors.cart",
             ],
         },
     },
 ]
 
+WSGI_APPLICATION = "ecommerce_proj.wsgi.application"
 
-WSGI_APPLICATION = 'ecommerce_proj.wsgi.application'
-
-# Database
+# -----------------------------
+# DATABASE
+# -----------------------------
 DATABASES = {
-    'default': dj_database_url.config(
-        default='sqlite:///db.sqlite3',
+    "default": dj_database_url.config(
+        default="sqlite:///db.sqlite3",
         conn_max_age=600
     )
 }
 
-# Password validation
+# -----------------------------
+# PASSWORD VALIDATION
+# -----------------------------
 AUTH_PASSWORD_VALIDATORS = [
-    { 'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', },
-    { 'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', },
-    { 'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', },
-    { 'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# Internationalization
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+# -----------------------------
+# INTERNATIONAL
+# -----------------------------
+LANGUAGE_CODE = "en-us"
+TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
-# Static files
-STATIC_URL = 'static/'
+# -----------------------------
+# STATIC FILES (WHITENOISE ✅)
+# -----------------------------
+STATIC_URL = "/static/"
+
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+    os.path.join(BASE_DIR, "static")
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-# Cart
-CART_SESSION_ID = 'cart'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-# Auth Redirects
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-LOGIN_URL = '/account/login/'
+# -----------------------------
+# MEDIA FILES (FIXES IMAGES ✅)
+# -----------------------------
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+# -----------------------------
+# AUTH REDIRECTS
+# -----------------------------
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+LOGIN_URL = "/account/login/"
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# -----------------------------
+# CART
+# -----------------------------
+CART_SESSION_ID = "cart"
+
+# -----------------------------
+# CLOUDINARY (FOR PRODUCT IMAGES ✅)
+# -----------------------------
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
+}
+
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+# -----------------------------
+# ADMIN TOKEN
+# -----------------------------
 ADMIN_CREATE_TOKEN = os.environ.get("ADMIN_CREATE_TOKEN")
+
+# -----------------------------
+# DEFAULT PRIMARY KEY
+# -----------------------------
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
