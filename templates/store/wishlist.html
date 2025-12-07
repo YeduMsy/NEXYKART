@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'store:store_home' %}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">My Wishlist</li>
+        </ol>
+    </nav>
+    <h2 class="fw-bold text-uppercase border-bottom pb-2">My Wishlist <i class="fa-solid fa-heart text-danger ms-2"></i></h2>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+    {% for product in products %}
+    <div class="col">
+        <div class="card h-100 border-0 overflow-hidden product-card">
+            <!-- IMAGE -->
+            <a href="{{ product.get_absolute_url }}" class="text-decoration-none text-dark">
+                <div class="bg-white d-flex align-items-center justify-content-center p-4"
+                     style="height: 250px; overflow: hidden;">
+                    <img src="{{ product.image.url }}" alt="{{ product.title }}" class="img-fluid product-img">
+                </div>
+
+                <!-- BODY -->
+                <div class="card-body">
+                    <h6 class="fw-semibold text-truncate">{{ product.title }}</h6>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <span class="price-pill">${{ product.price }}</span>
+                        <!-- Remove from Wishlist Button (Small X) -->
+                        <a href="{% url 'store:wishlist_toggle' product.id %}" class="text-danger" title="Remove">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+        <div class="bg-white rounded-4 shadow-sm p-5">
+            <i class="fa-regular fa-heart fa-3x text-muted mb-3"></i>
+            <h3 class="fw-bold">Your wishlist is empty 💔</h3>
+            <p class="text-muted">Save items you love to view them here.</p>
+            <a href="{% url 'store:store_home' %}" class="btn btn-primary mt-3 px-4">Start Shopping</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- STYLES -->
+<style>
+    .product-card {
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0,0,0,.1);
+        transition: .3s ease;
+    }
+    .product-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 30px 80px rgba(0,0,0,.2);
+    }
+    .product-img {
+        max-height: 100%;
+        object-fit: contain;
+        transition: .4s ease;
+    }
+    .product-card:hover .product-img {
+        transform: scale(1.08);
+    }
+    .price-pill {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: .95rem;
+    }
+</style>
+{% endblock %}

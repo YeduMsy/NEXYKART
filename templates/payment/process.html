@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="min-height: 75vh;">
+        <div class="col-md-7 col-lg-5">
+
+            <!-- PAYMENT CARD -->
+            <div class="payment-card p-5 rounded-4 shadow-lg bg-white text-center">
+
+                <!-- ICON -->
+                <div class="payment-icon mb-4">
+                    <i class="fa-solid fa-credit-card"></i>
+                </div>
+
+                <!-- TITLE -->
+                <h2 class="fw-bold mb-2">Order Summary</h2>
+                <p class="text-muted mb-4">Review your final amount before proceeding</p>
+
+                <!-- TOTAL BOX -->
+                <div class="total-box mb-4">
+                    <span class="text-muted">Total Payable</span>
+                    <h1 class="fw-bold text-primary mt-2">
+                        ${{ order.get_total_cost }}
+                    </h1>
+                </div>
+
+                <!-- INFO ALERT -->
+                <div class="alert alert-info small rounded-3 mb-4">
+                    <i class="fa-solid fa-circle-info me-2"></i>
+                    This is a simulation. No real money will be charged.
+                </div>
+
+                <!-- PAYMENT FORM -->
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg pay-btn">
+                            <i class="fa-solid fa-lock me-2"></i> Simulate Successful Payment
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PREMIUM PAYMENT STYLES -->
+<style>
+    /* CARD ANIMATION */
+    .payment-card {
+        animation: fadeUp .6s ease;
+    }
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ICON */
+    .payment-icon {
+        width: 90px;
+        height: 90px;
+        margin: 0 auto;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #43cea2, #185a9d);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        box-shadow: 0 15px 40px rgba(67,206,162,.5);
+        animation: pop .6s ease;
+    }
+
+    @keyframes pop {
+        0% { transform: scale(0.6); opacity: 0; }
+        80% { transform: scale(1.1); }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* TOTAL BOX */
+    .total-box {
+        background: linear-gradient(135deg, #f9fafb, #eef2ff);
+        border-radius: 16px;
+        padding: 20px;
+        border: 1px solid #e5e7eb;
+    }
+
+    /* PAY BUTTON */
+    .pay-btn {
+        box-shadow: 0 14px 35px rgba(34,197,94,.4);
+        transition: .3s ease;
+        border-radius: 14px;
+    }
+
+    .pay-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 25px 60px rgba(34,197,94,.6);
+    }
+</style>
+
+{% endblock %}

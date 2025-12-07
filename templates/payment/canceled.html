@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+        <div class="col-md-7 col-lg-5">
+
+            <!-- CANCEL CARD -->
+            <div class="cancel-card p-5 rounded-4 shadow-lg bg-white text-center">
+
+                <!-- CANCEL ICON -->
+                <div class="cancel-icon mb-4">
+                    <i class="fa-solid fa-xmark"></i>
+                </div>
+
+                <!-- TITLE -->
+                <h2 class="fw-bold text-danger mb-2">Payment Canceled</h2>
+                <p class="text-muted mb-4">
+                    It looks like the payment process was interrupted. No money was charged.
+                </p>
+
+                <!-- INFO BOX -->
+                <div class="cancel-info mb-4">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Order Status</span>
+                        <span class="fw-bold text-danger">Canceled</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Payment</span>
+                        <span class="fw-bold">Not Completed</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">Cart</span>
+                        <span class="fw-bold text-warning">Saved</span>
+                    </div>
+                </div>
+
+                <!-- ACTION BUTTONS -->
+                <div class="d-grid gap-3">
+                    <a href="{% url 'cart:cart_detail' %}" class="btn btn-warning btn-lg cancel-btn">
+                        <i class="fa-solid fa-rotate-left me-2"></i> Return to Cart
+                    </a>
+
+                    <a href="{% url 'store:product_list' %}" class="btn btn-outline-secondary">
+                        Continue Shopping
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CANCEL PAGE STYLES -->
+<style>
+    /* CARD ENTRY ANIMATION */
+    .cancel-card {
+        animation: scaleFade .5s ease;
+    }
+
+    @keyframes scaleFade {
+        from { 
+            opacity: 0; 
+            transform: scale(.9); 
+        }
+        to { 
+            opacity: 1; 
+            transform: scale(1); 
+        }
+    }
+
+    /* CANCEL ICON */
+    .cancel-icon {
+        width: 90px;
+        height: 90px;
+        margin: 0 auto;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ef4444, #b91c1c);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 38px;
+        box-shadow: 0 15px 40px rgba(239,68,68,.45);
+        animation: shake .6s ease;
+    }
+
+    @keyframes shake {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-6px); }
+        50% { transform: translateX(6px); }
+        75% { transform: translateX(-4px); }
+        100% { transform: translateX(0); }
+    }
+
+    /* INFO BOX */
+    .cancel-info {
+        background: linear-gradient(135deg, #fff5f5, #fee2e2);
+        border-radius: 16px;
+        padding: 20px;
+        border: 1px solid #fecaca;
+        font-size: 14px;
+    }
+
+    /* CANCEL BUTTON */
+    .cancel-btn {
+        box-shadow: 0 14px 35px rgba(245,158,11,.4);
+        transition: .3s ease;
+        border-radius: 14px;
+    }
+
+    .cancel-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 25px 60px rgba(245,158,11,.6);
+    }
+</style>
+
+{% endblock %}

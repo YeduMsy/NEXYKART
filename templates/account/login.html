@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="min-height: 75vh;">
+        <div class="col-md-6 col-lg-4">
+
+            <!-- LOGIN CARD -->
+            <div class="login-card p-5 rounded-4 shadow-lg bg-white">
+
+                <!-- ICON -->
+                <div class="text-center mb-4">
+                    <div class="login-icon mb-3">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                    </div>
+                    <h2 class="fw-bold">Welcome Back</h2>
+                    <p class="text-muted">Login to continue shopping</p>
+                </div>
+
+                <!-- LOGIN FORM -->
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-4">
+                        {{ form.username.label_tag }}
+                        <input type="text"
+                               name="username"
+                               class="form-control form-control-lg"
+                               required
+                               id="id_username">
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form.password.label_tag }}
+                        <input type="password"
+                               name="password"
+                               class="form-control form-control-lg"
+                               required
+                               id="id_password">
+                    </div>
+
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg login-btn">
+                            Login
+                        </button>
+                    </div>
+                </form>
+
+                <hr class="my-4">
+
+                <!-- REGISTER LINK -->
+                <div class="text-center">
+                    <p class="text-muted mb-1">Don’t have an account?</p>
+                    <a href="{% url 'account:register' %}" class="fw-bold text-decoration-none">
+                        Create your account →
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CUSTOM STYLES -->
+<style>
+    /* LOGIN CARD */
+    .login-card {
+        animation: fadeUp .6s ease;
+    }
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* LOGIN ICON */
+    .login-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 34px;
+        box-shadow: 0 15px 40px rgba(102,126,234,.5);
+        animation: pop .6s ease;
+    }
+
+    @keyframes pop {
+        0% { transform: scale(0.6); opacity: 0; }
+        80% { transform: scale(1.1); }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* INPUTS */
+    .form-control {
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        transition: .25s ease;
+    }
+
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 4px rgba(102,126,234,.15);
+    }
+
+    /* LOGIN BUTTON */
+    .login-btn {
+        box-shadow: 0 14px 35px rgba(102,126,234,.4);
+        transition: .3s ease;
+    }
+
+    .login-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 25px 60px rgba(102,126,234,.6);
+    }
+</style>
+
+{% endblock %}

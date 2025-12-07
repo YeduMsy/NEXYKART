@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'store:category_detail' product.category.slug %}" class="text-decoration-none">{{ product.category.name }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ product.title }}</li>
+    </ol>
+</nav>
+
+<div class="card shadow-sm border-0">
+    <div class="row g-0">
+        <!-- Product Image -->
+        <div class="col-md-6 bg-white d-flex align-items-center justify-content-center p-5">
+            <img src="{{ product.image.url }}" class="img-fluid rounded" alt="{{ product.title }}" style="max-height: 500px;">
+        </div>
+        
+        <!-- Product Info -->
+        <div class="col-md-6">
+            <div class="card-body p-5">
+                <small class="text-uppercase text-muted fw-bold">{{ product.category.name }}</small>
+                <h1 class="display-5 fw-bold mt-2">{{ product.title }}</h1>
+                <h2 class="text-primary mb-4">${{ product.price }}</h2>
+                
+                <p class="lead mb-4">{{ product.description }}</p>
+                
+                <hr class="my-4">
+                
+                <!-- Stock Status -->
+                <div class="mb-4">
+                    {% if product.stock > 0 %}
+                        <span class="badge bg-success px-3 py-2 rounded-pill"><i class="fa-solid fa-check me-1"></i> In Stock ({{ product.stock }})</span>
+                    {% else %}
+                        <span class="badge bg-secondary px-3 py-2 rounded-pill">Out of Stock</span>
+                    {% endif %}
+                </div>
+
+                <!-- Action Form with Quantity -->
+                <form action="{% url 'cart:cart_add' product.id %}" method="post" class="d-flex gap-3 align-items-end">
+                    {% csrf_token %}
+                    
+                    {% if product.stock > 0 %}
+                    <div style="width: 80px;">
+                        <label class="form-label small text-muted fw-bold mb-1">Qty</label>
+                        <input type="number" 
+                               name="quantity" 
+                               value="1" 
+                               min="1" 
+                               max="{{ product.stock }}" 
+                               class="form-control text-center fw-bold border-2">
+                    </div>
+                    {% endif %}
+
+                    <button type="submit" class="btn btn-primary btn-lg flex-grow-1" {% if product.stock == 0 %}disabled{% endif %}>
+                        <i class="fa-solid fa-cart-plus me-2"></i> 
+                        {% if product.stock > 0 %}Add to Cart{% else %}Sold Out{% endif %}
+                    </button>
+                    
+                    <!-- Wishlist button (New Logic) -->
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'store:wishlist_toggle' product.id %}" class="btn btn-outline-danger btn-lg" title="Add to Wishlist">
+                            {% if user in product.users_wishlist.all %}
+                                <i class="fa-solid fa-heart"></i> <!-- Solid if liked -->
+                            {% else %}
+                                <i class="fa-regular fa-heart"></i> <!-- Outline if not -->
+                            {% endif %}
+                        </a>
+                    {% else %}
+                        <a href="{% url 'account:login' %}?next={{ request.path }}" class="btn btn-outline-danger btn-lg" title="Login to add to Wishlist">
+                            <i class="fa-regular fa-heart"></i>
+                        </a>
+                    {% endif %}
+                </form>
+                
+                <!-- Trust Badges (Static) -->
+                <div class="row mt-5 text-center g-2">
+                    <div class="col-4">
+                        <div class="border rounded p-2 bg-light">
+                            <i class="fa-solid fa-truck text-muted mb-1"></i><br>
+                            <small class="fw-bold">Fast Delivery</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="border rounded p-2 bg-light">
+                            <i class="fa-solid fa-shield-halved text-muted mb-1"></i><br>
+                            <small class="fw-bold">Secure Pay</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="border rounded p-2 bg-light">
+                            <i class="fa-solid fa-rotate-left text-muted mb-1"></i><br>
+                            <small class="fw-bold">Easy Returns</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Related Products Section -->
+{% if related_products %}
+<div class="mt-5">
+    <h3 class="mb-4 fw-bold text-uppercase">You might also like</h3>
+    
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        {% for item in related_products %}
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm product-card">
+                <a href="{{ item.get_absolute_url }}" class="text-decoration-none text-dark">
+                    <div class="bg-white d-flex align-items-center justify-content-center p-3" style="height: 180px; overflow: hidden;">
+                        <img src="{{ item.image.url }}" alt="{{ item.title }}" class="img-fluid" style="max-height: 100%; object-fit: contain;">
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title text-truncate">{{ item.title }}</h6>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <span class="fw-bold text-primary">${{ item.price }}</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    /* Mini Product Card Styles for Related Items */
+    .product-card { transition: transform 0.2s; }
+    .product-card:hover { transform: translateY(-5px); }
+</style>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,239 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>NexyKart — Smart Shopping</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon.svg' %}">
+
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+
+        body { background: #f4f7fb; }
+
+        /* Navbar */
+        .navbar {
+            backdrop-filter: blur(10px);
+            background: rgba(15,23,42,0.98);
+            box-shadow: 0 12px 30px rgba(0,0,0,.2);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.4rem;
+        }
+
+        .brand-text { color: #fcd34d; font-weight: 800; } /* golden */
+        .brand-accent { color: #ffffff; font-weight: 800; } /* white */
+
+        .nav-link { font-weight: 500; transition: .2s; }
+        .nav-link:hover { color: #93c5fd !important; transform: translateY(-1px); }
+
+        /* Buttons */
+        .btn-primary {
+            background: #6366f1;
+            border: none;
+            box-shadow: 0 8px 18px rgba(102,102,255,.35);
+            transition: .25s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(102,102,255,.5);
+        }
+
+        /* Cards */
+        .card { border: none; border-radius: 18px; box-shadow: 0 12px 35px rgba(0,0,0,.08); transition: .3s; }
+        .card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 60px rgba(0,0,0,.15); }
+
+        /* Wrapper */
+        .wrapper { min-height: 100vh; display: flex; flex-direction: column; }
+        main { flex: 1; }
+
+        /* Footer */
+        footer { background: linear-gradient(135deg, #020617, #0f172a); color: #94a3b8; padding: 60px 0 30px; }
+        footer h5 { color: white; font-weight: 600; }
+        footer a { color: #94a3b8; transition: .25s; }
+        footer a:hover { color: #60a5fa; text-shadow: 0 0 12px #2563eb; }
+
+        /* Hero Styles (Available globally, but used in Home) */
+        .hero {
+            position: relative;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 24px;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .animated-bg {
+            background: linear-gradient(135deg, #1e3a8a, #6366f1, #ec4899);
+            background-size: 600% 600%;
+            animation: gradientMove 15s ease infinite;
+            position: absolute;
+            top:0; left:0; width:100%; height:100%;
+            z-index:0;
+        }
+
+        @keyframes gradientMove {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.35);
+            z-index: 0;
+        }
+
+        .hero-gradient { 
+            font-weight: 800; 
+            background: linear-gradient(135deg, #fcd34d, #f59e0b); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-accent { font-weight: 800; color: #ffffff; }
+
+        .hero-btn {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(0,0,0,.25);
+        }
+
+        /* Badge pulse */
+        .badge { animation: pulse 1.4s infinite; }
+        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.15);} 100% {transform: scale(1);} }
+    </style>
+</head>
+
+<body>
+<div class="wrapper">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="fa-solid fa-bolt me-2"></i>
+                <span class="brand-text">NEXY</span><span class="brand-accent">KART</span>
+            </a>
+            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <form class="d-flex mx-auto my-3 my-lg-0 w-100 search-box" action="/" method="get" style="max-width:480px;">
+                    <div class="input-group shadow-lg">
+                        <input class="form-control" type="search" name="q" placeholder="Search awesome products...">
+                        <button class="btn btn-light"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                </form>
+
+                <ul class="navbar-nav ms-auto align-items-center gap-3">
+                    <li class="nav-item">
+                        <a href="{% url 'cart:cart_detail' %}" class="nav-link position-relative">
+                            <i class="fa-solid fa-cart-shopping fa-lg"></i>
+                            {% if cart|length > 0 %}
+                                <span class="position-absolute top-0 start-100 translate-middle badge bg-danger">{{ cart|length }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-user me-1"></i>{{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow">
+                            <li><a class="dropdown-item" href="{% url 'store:wishlist' %}">My Wishlist</a></li> <!-- Add This -->
+                            <li><a class="dropdown-item" href="{% url 'store:order_history' %}">Order History</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                            <form action="{% url 'account:logout' %}" method="post">
+                                {% csrf_token %}
+                                <button class="dropdown-item text-danger">Logout</button>
+                            </form>
+                            </li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item d-flex gap-2">
+                        <a href="{% url 'account:login' %}" class="btn btn-outline-light btn-sm">Login</a>
+                        <a href="{% url 'account:register' %}" class="btn btn-primary btn-sm">Sign Up</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container py-5">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow">
+                    {{ message }}
+                    <button class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <!-- HERO SECTION REMOVED FROM HERE -->
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <div class="container">
+            <div class="row text-start mb-4">
+                <div class="col-md-4 mb-4">
+                    <h5 class="text-white">NEXYKART</h5>
+                    <p class="small">Smart shopping for the next generation.</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Follow Us</h5>
+                    <div class="d-flex gap-3 fs-4">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-secondary">
+            <small>&copy; 2025 NEXYKART. Built with Django, by yours truly.</small>
+        </div>
+    </footer>
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- BREADCRUMB & HEADER -->
+<div class="mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'store:store_home' %}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+        </ol>
+    </nav>
+    <h2 class="fw-bold text-uppercase border-bottom pb-2">{{ page_title }}</h2>
+</div>
+
+<!-- PRODUCTS GRID -->
+<div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+
+    {% for product in products %}
+    <div class="col">
+        <div class="card h-100 border-0 overflow-hidden product-card">
+
+            <!-- IMAGE -->
+            <a href="{{ product.get_absolute_url }}" class="text-decoration-none text-dark">
+                <div class="bg-white d-flex align-items-center justify-content-center p-4"
+                     style="height: 250px; overflow: hidden;">
+                    <img src="{{ product.image.url }}"
+                         alt="{{ product.title }}"
+                         class="img-fluid product-img">
+                </div>
+
+                <!-- BODY -->
+                <div class="card-body">
+                    <h6 class="fw-semibold text-truncate">{{ product.title }}</h6>
+
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <span class="price-pill">${{ product.price }}</span>
+
+                        {% if product.stock > 0 %}
+                            <span class="badge stock-in">In Stock</span>
+                        {% else %}
+                            <span class="badge bg-dark">Sold Out</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </a>
+
+            <!-- FOOTER -->
+            <div class="card-footer bg-white border-0 pt-0 pb-3">
+                <div class="d-grid">
+                    <a href="{{ product.get_absolute_url }}" class="btn btn-outline-primary">
+                        View Details
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {% empty %}
+
+    <!-- EMPTY STATE -->
+    <div class="col-12 text-center py-5">
+        <div class="bg-white rounded-4 shadow-sm p-5">
+            <h3 class="fw-bold">No products found here 😬</h3>
+            <p class="text-muted">This category seems to be empty or sold out.</p>
+            <a href="{% url 'store:store_home' %}" class="btn btn-primary mt-3 px-4">Browse Categories</a>
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
+
+<!-- STYLES (Reused from your design) -->
+<style>
+    .product-card {
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0,0,0,.1);
+        transition: .3s ease;
+    }
+    .product-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 30px 80px rgba(0,0,0,.2);
+    }
+    .product-img {
+        max-height: 100%;
+        object-fit: contain;
+        transition: .4s ease;
+    }
+    .product-card:hover .product-img {
+        transform: scale(1.08);
+    }
+    .price-pill {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: .95rem;
+    }
+    .stock-in {
+        background: rgba(34,197,94,.12);
+        color: #16a34a;
+        animation: pulse 1.4s infinite;
+    }
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+</style>
+
+{% endblock %}
