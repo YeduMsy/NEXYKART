@@ -9,22 +9,6 @@ from django.conf import settings
 from django.contrib.auth.models import User
 
 
-def create_superuser_view(request):
-    token = request.GET.get("token")
-
-    if token != settings.ADMIN_CREATE_TOKEN:
-        return HttpResponseForbidden("Unauthorized")
-
-    if not User.objects.filter(username="admin").exists():
-        User.objects.create_superuser(
-            username="admin",
-            email="admin@example.com",
-            password="holasoydora"
-        )
-        return HttpResponse("<h1>✅ Superuser created successfully</h1>")
-    else:
-        return HttpResponse("<h1>⚠️ Superuser already exists</h1>")
-
 
 def store_home(request):
     query = request.GET.get('q')
