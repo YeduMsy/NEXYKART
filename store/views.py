@@ -8,13 +8,17 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 
 def create_superuser_view(request):
-    # Check if admin already exists to prevent errors
-    if not User.objects.filter(username='admin').exists():
-        # Change 'MySecurePass123!' to whatever password you want
-        User.objects.create_superuser('admin', 'admin@example.com', 'holasoydora')
-        return HttpResponse("<h1>Success! Superuser 'admin' created.</h1>")
-    else:
-        return HttpResponse("<h1>Superuser 'admin' already exists.</h1>")
+    if request.method == "POST":
+        if not User.objects.filter(username='admin').exists():
+            User.objects.create_superuser(
+                username='admin',
+                email='admin@example.com',
+                password='holasoydora'
+            )
+            return HttpResponse("<h1>Success! Superuser 'admin' created.</h1>")
+        else:
+            return HttpResponse("<h1>Superuser 'admin' already exists.</h1>")
+    return HttpResponse("<h1>Use POST request only.</h1>")
 def store_home(request):
     """
     The Homepage:
