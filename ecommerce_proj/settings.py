@@ -133,14 +133,16 @@ STORAGES = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+        # FIX: Use standard Django storage to avoid compression errors during build
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
 
 # -----------------------------
 # LEGACY STORAGE (Required for Cloudinary Library to work)
 # -----------------------------
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+# FIX: Use standard Django storage here as well
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 # -----------------------------
