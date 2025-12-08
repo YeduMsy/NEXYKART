@@ -133,8 +133,6 @@ STORAGES = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        # FIX: Use 'Compressed' but NOT 'Manifest'. 
-        # This serves files efficiently but won't crash the build if one is missing.
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
@@ -172,11 +170,6 @@ CLOUDINARY_STORAGE = {
     "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
     "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
 }
-
-# -----------------------------
-# ADMIN TOKEN
-# -----------------------------
-ADMIN_CREATE_TOKEN = os.environ.get("ADMIN_CREATE_TOKEN")
 
 # -----------------------------
 # DEFAULT PRIMARY KEY
