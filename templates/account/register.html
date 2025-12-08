@@ -1,23 +1,145 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-body p-5">
-                    <h2 class="mb-4 text-center">Create Account</h2>
-                    
-                    <form method="post">
-                        {% csrf_token %}
-                        <!-- The Safe Way to Render Forms -->
-                        {{ user_form.as_p }}
-                        
-                        <button type="submit" class="btn btn-primary w-100 mt-3">Register</button>
-                    </form>
+
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="min-height: 75vh;">
+        <div class="col-md-7 col-lg-5">
+
+            <!-- REGISTER CARD -->
+            <div class="login-card p-5 rounded-4 shadow-lg bg-white">
+
+                <!-- ICON -->
+                <div class="text-center mb-4">
+                    <div class="login-icon mb-3">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </div>
+                    <h2 class="fw-bold">Create Account</h2>
+                    <p class="text-muted">Join us and start shopping</p>
                 </div>
+
+                <!-- REGISTER FORM -->
+                <form method="post">
+                    {% csrf_token %}
+
+                    <!-- Global Errors -->
+                    {% if user_form.non_field_errors %}
+                        <div class="alert alert-danger shadow-sm">
+                            {% for error in user_form.non_field_errors %}
+                                <div class="small"><i class="fa-solid fa-circle-exclamation me-2"></i>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="vstack gap-3">
+                        {% for field in user_form %}
+                        <div class="form-group">
+                            <label class="form-label fw-bold small text-uppercase text-muted">{{ field.label }}</label>
+                            
+                            <!-- This renders the input with the classes we added in forms.py -->
+                            {{ field }}
+
+                            {% if field.help_text %}
+                                <div class="form-text text-muted small ms-1">
+                                    {{ field.help_text }}
+                                </div>
+                            {% endif %}
+                            
+                            {% for error in field.errors %}
+                                <div class="text-danger small mt-1 ms-1">
+                                    <i class="fa-solid fa-triangle-exclamation me-1"></i>{{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg login-btn text-uppercase fw-bold">
+                            Create Account
+                        </button>
+                    </div>
+                </form>
+
+                <hr class="my-4 text-muted opacity-25">
+
+                <!-- LOGIN LINK -->
+                <div class="text-center">
+                    <p class="text-muted mb-1 small">Already have an account?</p>
+                    <a href="{% url 'account:login' %}" class="fw-bold text-decoration-none text-primary">
+                        Login here <i class="fa-solid fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+
             </div>
         </div>
     </div>
 </div>
+
+<!-- PREMIUM STYLES -->
+<style>
+    /* ANIMATIONS */
+    .login-card {
+        animation: fadeUp .6s cubic-bezier(0.2, 0.8, 0.2, 1);
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ICON STYLE */
+    .login-icon {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        box-shadow: 0 10px 25px rgba(102,126,234,0.4);
+        animation: pop .6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes pop {
+        0% { transform: scale(0.5); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* INPUT STYLING */
+    .form-control {
+        background-color: #f8f9fa;
+        border: 2px solid transparent;
+        padding: 12px 15px;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+        background-color: #fff;
+        border-color: #667eea;
+        box-shadow: 0 0 0 4px rgba(102,126,234,0.15);
+    }
+
+    /* BUTTON STYLING */
+    .login-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        padding: 12px;
+        letter-spacing: 0.5px;
+        box-shadow: 0 10px 20px -5px rgba(102,126,234,0.5);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .login-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 30px -5px rgba(102,126,234,0.6);
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    }
+</style>
+
 {% endblock %}
