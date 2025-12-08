@@ -27,16 +27,21 @@ else:
 # APPS
 # -----------------------------
 INSTALLED_APPS = [
-    "cloudinary",
-    "cloudinary_storage",
-
+    # 1. This MUST be at the top
+    "cloudinary_storage", 
+    
+    # 2. Standard Django apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "django.contrib.staticfiles",
+    "django.contrib.staticfiles", 
 
+    # 3. Cloudinary library comes AFTER staticfiles
+    "cloudinary", 
+
+    # 4. Your Apps
     "store",
     "cart",
     "account",
