@@ -127,7 +127,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # -----------------------------
 # STORAGES (Django 5+ Config)
-# ----------------------------- 
+# -----------------------------
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
@@ -136,6 +136,12 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
+
+# -----------------------------
+# LEGACY STORAGE (Required for Cloudinary Library to work)
+# -----------------------------
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 # -----------------------------
 # MEDIA FILES
