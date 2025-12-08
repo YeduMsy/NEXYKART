@@ -127,8 +127,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # -----------------------------
 # STORAGES (Django 5+ Config)
-# -----------------------------
-# This replaces the old STATICFILES_STORAGE and DEFAULT_FILE_STORAGE settings
+# ----------------------------- 
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
