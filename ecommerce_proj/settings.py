@@ -125,10 +125,21 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+# -----------------------------
+# STORAGES (Django 5+ Config)
+# -----------------------------
+# This replaces the old STATICFILES_STORAGE and DEFAULT_FILE_STORAGE settings
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
 
 # -----------------------------
-# MEDIA FILES (FIXES IMAGES ✅)
+# MEDIA FILES
 # -----------------------------
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -146,15 +157,13 @@ LOGIN_URL = "/account/login/"
 CART_SESSION_ID = "cart"
 
 # -----------------------------
-# CLOUDINARY (FOR PRODUCT IMAGES ✅)
+# CLOUDINARY CONFIG
 # -----------------------------
 CLOUDINARY_STORAGE = {
     "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
     "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
     "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
 }
-
-DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 # -----------------------------
 # ADMIN TOKEN
