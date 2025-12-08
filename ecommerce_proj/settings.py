@@ -133,7 +133,9 @@ STORAGES = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+        # FIX: Use standard Django storage. This DISABLES the compression step 
+        # that is causing the FileNotFoundError crashes during build.
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
 
@@ -141,7 +143,7 @@ STORAGES = {
 # LEGACY STORAGE
 # -----------------------------
 # Keep these synced with the STORAGES dict above for compatibility
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 # -----------------------------
@@ -170,6 +172,11 @@ CLOUDINARY_STORAGE = {
     "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
     "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
 }
+
+# -----------------------------
+# ADMIN TOKEN
+# -----------------------------
+ADMIN_CREATE_TOKEN = os.environ.get("ADMIN_CREATE_TOKEN")
 
 # -----------------------------
 # DEFAULT PRIMARY KEY
