@@ -10,6 +10,7 @@ def register(request):
             new_user.set_password(user_form.cleaned_data['password'])
             new_user.save()
             login(request, new_user)
+            # FIX: Redirect to 'store:store_home' (the correct URL name)
             return redirect('store:store_home')
     else:
         user_form = UserRegistrationForm()
